@@ -29,6 +29,7 @@ ICINGAWEB2_URL = 'https://icinga.XXXXXX.XX/icingaweb2'
 ICINGA_LOGO = '/usr/share/icingaweb2/public/img/icinga-logo.png'
 WITH_DEBUG = False
 
+
 def perfdata_table(perfdata):
     '''
     generate html table for performance data
@@ -79,6 +80,7 @@ def perfdata_table(perfdata):
 
     return html
 
+
 def main():
     '''
     main function
@@ -104,7 +106,8 @@ def main():
     notification_type = environ.get('NOTIFICATIONTYPE')
     host_name = environ.get('HOSTNAME')
     host_address = environ.get('HOSTADDRESS')
-    last_check_datetime = datetime.utcfromtimestamp(float(environ.get('LASTCHECK')))
+    last_check_datetime = datetime.utcfromtimestamp(
+        float(environ.get('LASTCHECK')))
     last_check = last_check_datetime.strftime('%F %H:%M:%S %Z')
     last_state = environ.get('LASTSTATE')
     last_state_type = environ.get('LASTSTATETYPE')
@@ -145,7 +148,8 @@ def main():
             icingaweb2_url=ICINGAWEB2_URL,
             hostname=host_name
         )
-    problem_time_datetime = datetime.utcnow() - timedelta(seconds=float(duration))
+    problem_time_datetime = datetime.utcnow() - timedelta(
+        seconds=float(duration))
     problem_time = problem_time_datetime.strftime('%F %H:%M:%S %Z')
     duration = timedelta(seconds=float(duration))
     subject += ' is {}'.format(state)
@@ -246,16 +250,16 @@ Duration:          {duration} hours (since {problem_time})
 Comment:           {comment}
 Author:            {author}
     '''.format(
-        comment=comment,
-        author=author
-    )
+            comment=comment,
+            author=author
+        )
         html += '''
 <tr><td>Comment:</td><td>{comment}</td></tr>
 <tr><td>Author:</td><td>{author}</td></tr>
     '''.format(
-        comment=comment,
-        author=author
-    )
+            comment=comment,
+            author=author
+        )
 
     text += '''
 Show Details:      {details_url}
@@ -268,7 +272,8 @@ Show Details:      {details_url}
         details_url=details_url
     )
 
-    if notification_type not in ['RECOVERY', 'DOWNTIME', 'FLAPPINGSTART', 'FLAPPINGEND']:
+    if notification_type not in ['RECOVERY', 'DOWNTIME', 'FLAPPINGSTART',
+                                 'FLAPPINGEND']:
         text += '''
 Acknowledge:       {ack_url}
     '''.format(ack_url=ack_url)
@@ -301,19 +306,18 @@ Acknowledge:       {ack_url}
     smpt_conn.sendmail(args.sender, args.recipient, msg.as_string())
     smpt_conn.quit()
 
+
 if __name__ == '__main__':
     if WITH_DEBUG:
-            try:
-                with open('/tmp/icinga-mail-log.txt', 'a') as f:
-                   f.write(str(environ))
-                   f.write('\n---\n')
-                main()
-            except Exception as exc:
-              with open('/tmp/icinga-mail-log.txt', 'a') as f:
-                  f.write(str(exc))
-                  f.write(traceback.format_exc())
-                  f.write('---\n')
+        try:
+            with open('/tmp/icinga-mail-log.txt', 'a') as f:
+                f.write(str(environ))
+                f.write('\n---\n')
+            main()
+        except Exception as exc:
+            with open('/tmp/icinga-mail-log.txt', 'a') as f:
+                f.write(str(exc))
+                f.write(traceback.format_exc())
+                f.write('---\n')
     else:
         main()
-        
-
