@@ -23,6 +23,7 @@ __status__ = 'Development'
 
 SMTP_HOST = 'localhost'
 ICINGAWEB2_URL = 'https://icinga2/icingaweb2'
+ICINGA_LOGO = '/usr/share/icingaweb2/public/img/icinga-logo.png'
 
 def perfdata_table(perfdata):
     '''
@@ -140,9 +141,9 @@ def main():
             icingaweb2_url=ICINGAWEB2_URL,
             hostname=host_name
         )
-    problem_time_datetime = datetime.utcnow() - timedelta(seconds=int(duration))
+    problem_time_datetime = datetime.utcnow() - timedelta(seconds=float(duration))
     problem_time = problem_time_datetime.strftime('%F %H:%M:%S %Z')
-    duration = timedelta(seconds=int(duration))
+    duration = timedelta(seconds=float(duration))
     subject += ' is {}'.format(state)
 
     # start
@@ -278,7 +279,7 @@ Acknowledge:       {ack_url}
     '''
 
     # read log data
-    img_filename = '/usr/share/icingaweb2/public/img/logo_icinga.png'
+    img_filename = ICINGA_LOGO
     img_data = open(img_filename, 'rb').read()
     # create email
     msg = MIMEMultipart('alternative')
