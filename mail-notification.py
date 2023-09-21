@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
 An email notification script for Icinga 2
 '''
+# source https://github.com/tobiasvdk/icinga2-notification/blob/master/mail-notification.py
+# modified for testing
 
 import argparse
 from datetime import datetime, timedelta
@@ -12,6 +14,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import re
 import smtplib
+import traceback
 
 __author__ = 'Tobias von der Krone'
 __copyright__ = ''
@@ -22,8 +25,9 @@ __email__ = 'tobias@vonderkrone.info'
 __status__ = 'Development'
 
 SMTP_HOST = 'localhost'
-ICINGAWEB2_URL = 'https://icinga2/icingaweb2'
+ICINGAWEB2_URL = 'https://icinga.XXXXXX.XX/icingaweb2'
 ICINGA_LOGO = '/usr/share/icingaweb2/public/img/icinga-logo.png'
+WITH_DEBUG = False
 
 def perfdata_table(perfdata):
     '''
@@ -298,4 +302,18 @@ Acknowledge:       {ack_url}
     smpt_conn.quit()
 
 if __name__ == '__main__':
-    main()
+    if WITH_DEBUG:
+	    try:
+		with open('/tmp/icinga-mail-log.txt', 'a') as f:
+		   f.write(str(environ))
+		   f.write('\n---\n')
+		main()
+	    except Exception as exc:
+	      with open('/tmp/icinga-mail-log.txt', 'a') as f:
+		  f.write(str(exc))
+		  f.write(traceback.format_exc())
+		  f.write('---\n')
+    else:
+        main()
+        
+
