@@ -303,16 +303,16 @@ Acknowledge:       {ack_url}
 
 if __name__ == '__main__':
     if WITH_DEBUG:
-	    try:
-		with open('/tmp/icinga-mail-log.txt', 'a') as f:
-		   f.write(str(environ))
-		   f.write('\n---\n')
-		main()
-	    except Exception as exc:
-	      with open('/tmp/icinga-mail-log.txt', 'a') as f:
-		  f.write(str(exc))
-		  f.write(traceback.format_exc())
-		  f.write('---\n')
+            try:
+                with open('/tmp/icinga-mail-log.txt', 'a') as f:
+                   f.write(str(environ))
+                   f.write('\n---\n')
+                main()
+            except Exception as exc:
+              with open('/tmp/icinga-mail-log.txt', 'a') as f:
+                  f.write(str(exc))
+                  f.write(traceback.format_exc())
+                  f.write('---\n')
     else:
         main()
         
